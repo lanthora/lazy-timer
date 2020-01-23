@@ -29,11 +29,11 @@ class MoyuBot:
             pass
 
     def __check_in(self,chat_id):
-        text = strftime("【<b>上班打卡</b>】 %H:%M:%S", localtime())
+        text = strftime("【<b>上班打卡</b>】 %H:%M", localtime())
         self.__send_html(chat_id,text)
 
     def __check_out(self,chat_id):
-        text = strftime("【<b>下班提醒</b>】 %H:%M:%S", localtime())
+        text = strftime("【<b>下班提醒</b>】 %H:%M", localtime())
         self.__send_html(chat_id,text)
 
     def checkin(self, update, context):
