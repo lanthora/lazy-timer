@@ -28,15 +28,15 @@ class MoyuBot:
         except BaseException as e:
             pass
 
-    def check_in(self,chat_id):
+    def __check_in(self,chat_id):
         text = strftime("【<b>上班打卡</b>】 %H:%M:%S", localtime())
         self.__send_html(chat_id,text)
 
-    def check_out(self,chat_id):
+    def __check_out(self,chat_id):
         text = strftime("【<b>下班提醒</b>】 %H:%M:%S", localtime())
         self.__send_html(chat_id,text)
 
-    def start(self, update, context):
+    def checkin(self, update, context):
         chat_id = update.message.chat_id
         delay:int = 0
         try:
@@ -55,10 +55,10 @@ class MoyuBot:
             self.__send_html(chat_id,"打卡时发生了开发人员不想解决的错误")
             return
 
-        self.__lazytimer.add(time()+delay,self.check_out,[chat_id])
-        self.check_in(chat_id)
+        self.__lazytimer.add(time()+delay,self.__check_out,[chat_id])
+        self.__check_in(chat_id)
 
     def run(self):
-        self.dp.add_handler(CommandHandler('start', self.start))
+        self.dp.add_handler(CommandHandler('checkin', self.checkin))
         self.dp.add_error_handler(self.__error)
         self.updater.start_polling()
