@@ -40,7 +40,8 @@ class MoyuBot:
         chat_id = update.message.chat_id
         delay:int = 0
         try:
-            delay = int(update.message.text.split(' ')[1])
+            # 输入分钟，在代码级别转化成秒
+            delay = 60*int(update.message.text.split(' ')[1])
             self.dic[chat_id] = delay
         except IndexError:
             try:
