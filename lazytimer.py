@@ -12,7 +12,10 @@ class LazyItem:
         self.__args = args
 
     def run(self):
-        self.__function(*self.__args)
+        if(len(self.__args) == 0):
+            self.__function()
+        else:
+            self.__function(*self.__args)
 
     def __lt__(self, other):
         return self.timestamp < other.timestamp
@@ -56,6 +59,18 @@ class LazyTimer:
         self.priority_queue.put(item)
         self.__reset_sleep_time()
 
-    def add(self, timestamp, function, args):
+    def add(self, timestamp, function, args: dict = []):
         item = LazyItem(timestamp, function, args)
         self.__add(item)
+
+
+
+
+if __name__ == "__main__":
+    def test(msg="Hello World"):
+        print(msg)
+
+    lt = LazyTimer()
+    lt.add(time(), test)
+    lt.add(time()+3, test, [])
+    lt.add(time()+6, test, ["test"])
