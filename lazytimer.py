@@ -32,11 +32,7 @@ class LazyTimer:
         Thread(target=self.__background_check_and_run).start()
 
     def __sleep_for_a_while(self):
-        sleep(self.__sleep_time)
-        if self.__sleep_time < LazyTimer.ONE_SECOND:
-            self.__sleep_time *= 2
-        elif self.__sleep_time < LazyTimer.ONE_MINUTE:
-            self.__sleep_time += LazyTimer.ONE_SECOND
+        sleep(LazyTimer.ONE_SECOND)
 
     def __nothing_to_do(self):
         if self.priority_queue.empty():
@@ -62,8 +58,6 @@ class LazyTimer:
     def add(self, timestamp, function, args: dict = []):
         item = LazyItem(timestamp, function, args)
         self.__add(item)
-
-
 
 
 if __name__ == "__main__":
