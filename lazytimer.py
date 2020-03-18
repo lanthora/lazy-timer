@@ -24,15 +24,13 @@ class LazyItem:
 class LazyTimer:
     ONE_SECOND = 1
     ONE_MINUTE = ONE_SECOND * 60
-    ORIGINAL_SLEEP_TIME = 0.001
 
     def __init__(self):
-        self.__reset_sleep_time()
         self.priority_queue = PriorityQueue()
         Thread(target=self.__background_check_and_run).start()
 
     def __sleep_for_a_while(self):
-        sleep(LazyTimer.ONE_SECOND)
+        sleep(LazyTimer.ONE_MINUTE)
 
     def __nothing_to_do(self):
         if self.priority_queue.empty():
@@ -48,12 +46,8 @@ class LazyTimer:
                 item: LazyItem = self.priority_queue.get()
                 item.run()
 
-    def __reset_sleep_time(self):
-        self.__sleep_time = LazyTimer.ORIGINAL_SLEEP_TIME
-
     def __add(self, item: LazyItem):
         self.priority_queue.put(item)
-        self.__reset_sleep_time()
 
     def add(self, timestamp, function, args: dict = []):
         item = LazyItem(timestamp, function, args)
