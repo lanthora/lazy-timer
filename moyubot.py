@@ -86,15 +86,15 @@ class MoyuBot:
             pass
 
     def __check_in(self, chat_id):
-        text = strftime("【<b>上班打卡</b>】 %H:%M", localtime())
+        text = strftime("【<b>上班打卡</b>】\n开始工作\n @%H:%M", localtime())
         self.__send_html(chat_id, text)
 
     def __check_out(self, chat_id):
-        text = strftime("【<b>下班提醒</b>】 %H:%M", localtime())
+        text = strftime("【<b>下班提醒</b>】\n打卡走人吧\n @%H:%M", localtime())
         self.__send_html(chat_id, text)
 
     def __remind(self, chat_id):
-        text = strftime("【<b>半小时后下班提醒</b>】 %H:%M", localtime())
+        text = strftime("【<b>下班提醒</b>】\n还有半小时就要下班了\n @%H:%M", localtime())
         self.__send_html(chat_id, text)
 
     def checkin(self, update, context):
