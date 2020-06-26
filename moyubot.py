@@ -1,6 +1,7 @@
 import configparser
 import json
 import signal
+import sys
 from functools import wraps
 from time import localtime, strftime, time
 
@@ -8,6 +9,10 @@ from telegram import Bot
 from telegram.ext import CommandHandler, Updater
 
 from lazytimer import LazyTimer
+
+
+def absolute_path(relative_path: str) -> str:
+    return "{}/{}".format(sys.path[0], relative_path)
 
 
 def default(default_value):
