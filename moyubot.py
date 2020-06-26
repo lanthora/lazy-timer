@@ -93,6 +93,10 @@ class MoyuBot:
         text = strftime("【<b>下班提醒</b>】 %H:%M", localtime())
         self.__send_html(chat_id, text)
 
+    def __remind(self, chat_id):
+        text = strftime("【<b>半小时后下班提醒</b>】 %H:%M", localtime())
+        self.__send_html(chat_id, text)
+
     def checkin(self, update, context):
         chat_id = str(update.message.chat_id)
         delay: int = 0
@@ -104,7 +108,7 @@ class MoyuBot:
             NoSQLDB().dump()
         except IndexError:
             try:
-                
+
                 delay = self.dic[chat_id]
             except KeyError:
                 logging.info("未读取到 {} 对应的值，打印完整的字典".format(chat_id))
@@ -118,6 +122,7 @@ class MoyuBot:
             return
 
         self.__lazytimer.add(time()+delay, self.__check_out, [chat_id])
+        self.__lazytimer.add(time()+delay-1800, self.__remind, [chat_id])
         self.__check_in(chat_id)
 
     def run(self):
