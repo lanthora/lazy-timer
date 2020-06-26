@@ -48,9 +48,6 @@ class NoSQLDB(object):
             return json.load(f)
 
     def dump(self):
-        if(self.__dumped):
-            return
-        self.__dumped = True
         with open(absolute_path("database.json"), "w", encoding="UTF-8") as f:
             json.dump(self.data, f, ensure_ascii=False)
 
