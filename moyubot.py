@@ -1,44 +1,31 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#                                                                             #
+#     Copyright (C)     2019-2020   lanthora                                  #
+#                                                                             #
+#    This program is free software: you can redistribute it and/or modify     #
+#    it under the terms of the GNU General Public License as published by     #
+#    the Free Software Foundation, either version 3 of the License, or        #
+#    (at your option) any later version.                                      #
+#                                                                             #
+#    This program is distributed in the hope that it will be useful,          #
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of           #
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            #
+#    GNU General Public License for more details.                             #
+#                                                                             #
+#    You should have received a copy of the GNU General Public License        #
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.   #
+#                                                                             #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 import configparser
 import json
 import signal
-import sys
-from functools import wraps
 from time import localtime, strftime, time
 
 from telegram import Bot
 from telegram.ext import CommandHandler, Updater
 
 from lazytimer import LazyTimer
-
-
-def absolute_path(relative_path: str) -> str:
-    return "{}/{}".format(sys.path[0], relative_path)
-
-
-def default(default_value):
-    def set_default_value(fn):
-        @wraps(fn)
-        def decorated(*args, **kwargs):
-            try:
-                ret = fn(*args, **kwargs)
-            except:
-                ret = default_value
-                logging.debug("函数 {} 使用默认返回值 {}".format(
-                    fn.__name__, default_value))
-            finally:
-                return ret
-        return decorated
-    return set_default_value
-
-
-def singleton(cls):
-    _instance = {}
-
-    def inner():
-        if cls not in _instance:
-            _instance[cls] = cls()
-        return _instance[cls]
-    return inner
+from util import absolute_path, default, singleton
 
 
 @singleton
@@ -56,7 +43,6 @@ class NoSQLDB(object):
 
     @default({})
     def __restore(self, path):
-        logging.info("加载数据")
         with open(path, "r", encoding="UTF-8") as f:
             return json.load(f)
 
@@ -64,8 +50,6 @@ class NoSQLDB(object):
         if(self.__dumped):
             return
         self.__dumped = True
-
-        logging.info("保存数据")
         with open(absolute_path("database.json"), "w", encoding="UTF-8") as f:
             json.dump(self.data, f, ensure_ascii=False)
 
