@@ -18,6 +18,7 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 import configparser
 import json
+import logging
 import signal
 from time import localtime, strftime, time
 
@@ -93,18 +94,21 @@ class MoyuBot:
         self.__send_html(chat_id, text)
 
     def checkin(self, update, context):
-        chat_id = int(update.message.chat_id)
+        chat_id = str(update.message.chat_id)
         delay: int = 0
         try:
             # 输入小时，在代码级别转化成秒
             def info(cmd): return [i for i in cmd.split(' ') if i != '']
-            delay = int(3600*float(info(update.message.text)[1]))
+            delay = 3600*float(info(update.message.text)[1])
             self.dic[chat_id] = delay
             NoSQLDB().dump()
         except IndexError:
             try:
+                
                 delay = self.dic[chat_id]
             except KeyError:
+                logging.info("未读取到 {} 对应的值，打印完整的字典".format(chat_id))
+                logging.info(self.dic)
                 self.__send_html(chat_id, "没有保存的打卡记录，请使用完整命令")
                 return
             except:
