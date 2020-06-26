@@ -24,6 +24,16 @@ def default(default_value):
     return set_default_value
 
 
+def singleton(cls):
+    _instance = {}
+
+    def inner():
+        if cls not in _instance:
+            _instance[cls] = cls()
+        return _instance[cls]
+    return inner
+
+
 @singleton
 class NoSQLDB(object):
     def __init__(self):
