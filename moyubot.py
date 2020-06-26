@@ -86,15 +86,15 @@ class MoyuBot:
             pass
 
     def __check_in(self, chat_id):
-        text = strftime("【<b>上班打卡</b>】\n开始工作\n @%H:%M", localtime())
+        text = strftime("<b>工作开始</b> @ %H:%M\n", localtime())
         self.__send_html(chat_id, text)
 
     def __check_out(self, chat_id):
-        text = strftime("【<b>下班提醒</b>】\n打卡走人吧\n @%H:%M", localtime())
+        text = strftime("<b>工作结束</b> @ %H:%M\n", localtime())
         self.__send_html(chat_id, text)
 
     def __remind(self, chat_id):
-        text = strftime("【<b>下班提醒</b>】\n还有半小时就要下班了\n @%H:%M", localtime())
+        text = strftime("<b>即将结束</b> @ %H:%M\n", localtime())
         self.__send_html(chat_id, text)
 
     def checkin(self, update, context):
@@ -111,18 +111,17 @@ class MoyuBot:
 
                 delay = self.dic[chat_id]
             except KeyError:
-                logging.info("未读取到 {} 对应的值，打印完整的字典".format(chat_id))
                 logging.info(self.dic)
-                self.__send_html(chat_id, "没有保存的打卡记录，请使用完整命令")
+                self.__send_html(chat_id, "没有保存的任务记录，请使用完整命令")
                 return
             except:
                 raise Exception()
         except:
-            self.__send_html(chat_id, "打卡时发生了开发人员不想解决的错误")
+            self.__send_html(chat_id, "添加任务时发生了开发人员不想解决的错误")
             return
 
         self.__lazytimer.add(time()+delay, self.__check_out, [chat_id])
-        self.__lazytimer.add(time()+delay-1800, self.__remind, [chat_id])
+        self.__lazytimer.add(time()+delay-600, self.__remind, [chat_id])
         self.__check_in(chat_id)
 
     def run(self):
