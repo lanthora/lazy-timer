@@ -125,6 +125,7 @@ class MoyuBot:
         self.dp.add_handler(CommandHandler('checkin', self.checkin))
         self.dp.add_error_handler(self.__error)
         self.updater.start_polling()
+        self.updater.idle()
 
     def sig_handler(self, signal, frame):
         NoSQLDB().dump()
